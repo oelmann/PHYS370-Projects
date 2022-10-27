@@ -1,0 +1,46 @@
+#include<stdio.h>
+#include<mygraph.h>
+
+#define Count 1000000
+
+double Ninit = 1;
+double Nm = 100;
+double a = 0.1;
+int count=0;
+double dat[Count][2];
+
+double binit=0.4, bend=0.65, bstep=0.001;
+int Nequalize=1000, Nshow=100;
+
+
+double F(double N,double b){
+  return N+b*N-a*N*Nm/(Nm-N);
+}
+
+void WriteToFile(){
+
+  FILE *res;
+  char name[255];
+
+  sprintf(name,"BunnyLatebinit_%e_bstop_%e.dat",binit,bstop);
+  res = fopen(name,"w");
+  for (i=0; i<count; i++)
+    fprintf(res,"%e %e\n",dat[i][0],dat[i][1]);
+  fclose(res);
+}
+
+int main(){
+  FILE *res;
+
+  res = fopen("BunnyLate.dat","w");
+  for (double b=binit; b<bend; b+=bstep){
+    double N=Ninit;
+    for (int i=0; i<Nequalize; i++){
+      N = F(N,b);
+  }
+    for (int i=0; i<Nshow; i++){
+      N = F(N,b);
+      fprintf(res,"%e %e\n" ,b ,N);
+    }
+  }
+}
